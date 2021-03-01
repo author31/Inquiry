@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 
 // Create express instance
 const app = express()
@@ -7,6 +8,7 @@ const app = express()
 const auth = require('./routes/auth')
 
 // Import API Routes
+app.use(cors())
 app.use(express.json());
 app.use(auth)
 

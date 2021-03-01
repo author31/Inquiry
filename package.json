@@ -10,9 +10,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.13.8",
+    "@fortawesome/fontawesome-free": "^5.15.1",
+    "@nuxt/core": "latest",
     "@nuxt/http": "latest",
     "@nuxtjs/axios": "^5.13.1",
-    "@nuxt/core": "latest"
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^3.4.2",
@@ -20,11 +23,6 @@
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3",
-    "@fortawesome/fontawesome-free": "^5.15.2",
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/vue-fontawesome": "^2.0.2",
     "@nuxtjs/firebase": "^7.4.1",
     "@nuxtjs/proxy": "^2.1.0",
     "cookie": "^0.4.1",
