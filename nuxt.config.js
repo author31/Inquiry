@@ -72,6 +72,9 @@ export default {
       },
     ],
   ],
+  axios: {
+    baseURL: "http://ec2-3-12-149-38.us-east-2.compute.amazonaws.com:3000/"
+  },
   /*
   ** Server Middleware
   */
@@ -81,10 +84,10 @@ export default {
   /*
   ** For deployment you might want to edit host and port
   */
-  server: {
-   port: 3000, // default: 3000
-   host: '0.0.0.0' // default: localhost
-  },
+  // server: {
+  //  port: 3000, // default: 3000
+  //  host: '0.0.0.0' // default: localhost
+  // },
 
   /*
   ** Build configuration

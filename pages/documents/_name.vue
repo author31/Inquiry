@@ -1,8 +1,11 @@
 <template>
   <client-only>
     <div class="grid md:grid-cols-5 mt-20 sm:grid-cols-12">
-      <div class="mb-2 md:col-start-2 xs:col-start-2">
-        <nuxt-link class="text-green-500 xl:text-xl" :to="`/documents/add/${this.name}`">
+      <div class="md:col-start-2 mx-2 font-bold mb-4 text-2xl">
+        <h1 class="">{{name}}</h1>
+      </div>
+      <div class="mb-2 mx-2 md:col-start-2 xs:col-start-2">
+        <nuxt-link class="text-green-500 md:text-xl" :to="`/documents/add/${this.name}`">
           <i class="fas fa-plus"> 新增一筆</i>
         </nuxt-link>
       </div>
