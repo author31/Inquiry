@@ -2,8 +2,6 @@
   <client-only>
     <div class="grid md:grid-cols-5 mt-20 sm:grid-cols-12">
       <h1 class="md:col-start-2 mx-2 font-bold">{{name}}</h1>
-      <div class="mb-2 md:col-start-2 xs:col-start-2">
-      </div>
       <table class="mx-2 md:col-span-3 md:col-start-2 sm:col-start-4">
         <tr>
             <th class="border-2 border-black">名字</th>
