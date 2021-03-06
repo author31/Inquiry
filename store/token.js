@@ -87,7 +87,8 @@ export const actions = {
             uid: getters.getUid.uid,
             username: payload.username,
             department: payload.department,
-            grade: payload.grade
+            grade: payload.grade,
+            gender: payload.gender
         }
         this.$axios.post('/api/signup', {userInfo: userInfo})
         .then((res) => {

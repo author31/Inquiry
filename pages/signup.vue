@@ -10,9 +10,16 @@
                 <input class="col-start-3 col-end-12 border-2 border-black mb-2 ml-4" type="text" name="deparment" v-model="userInfo.department"><br/>
 
                 <label class="col-start-1 col-span-2" for="grade">科系: </label>
-                <select class="col-start-3 col-end-12 border-2 ml-4" v-model="userInfo.grade">
+                <select class="col-start-3 col-end-12 border-2 mb-2 ml-4" v-model="userInfo.grade">
                     <option disabled value="">請選擇科系</option>
                     <option value="sport">運動管理學系</option>
+                </select>
+
+                <label class="col-start-1 col-span-2" for="gender">性別: </label>
+                <select class="col-start-3 col-end-12 border-2 ml-4" v-model="userInfo.gender">
+                    <option disabled value="">請選擇</option>
+                    <option value="male">男</option>
+                    <option value="female">女</option>
                 </select>
                 
             </div>
@@ -28,7 +35,8 @@ export default {
             userInfo: {
                 username: "",
                 department: "",
-                grade: ""
+                grade: "",
+                gener: "",
             }
         }
     },

@@ -69,7 +69,7 @@ html {
 }
 
 table { 
-  width: 100%; 
+  width: 99%; 
   border-collapse: collapse; 
 }
 /* Zebra striping */
