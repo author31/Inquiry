@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { extractTable } from '../../../controller/extractTable'
 export default {
     asyncData({params, store}) {
         const userInfo = store.getters["token/getUserInfo"] 
@@ -26,8 +25,7 @@ export default {
     data() {
       return {
         tableName: "",
-        columns: [
-        ],
+        columns: [],
         records:[],
       }
     },

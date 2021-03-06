@@ -33,7 +33,9 @@ async function getTable(payload) {
   .where('tableType', '==', payload.department).get()
   var tableList = []
   snapshot.docs.forEach((doc) => {
-    tableList.push(doc.data())
+    const id = {id: doc.id}
+    const details = Object.assign(doc.data(), id)
+    tableList.push(details)
   })
   return new Promise((resolve, reject) => {
     if(Object.keys(tableList)) {
@@ -44,8 +46,8 @@ async function getTable(payload) {
   })
 }
 
-async function getDocument(tableName, stdId) {
-  const snapshot = await db.collection(`main_collection/${tableName}/records`).where("stdId", "==", stdId).get()
+async function getDocument(docId, stdId) {
+  const snapshot = await db.collection(`main_collection/${docId}/records`).where("stdId", "==", stdId).get()
   var documentList = []
   snapshot.docs.forEach((doc) => {
     const id = {id: doc.id}
@@ -55,6 +57,17 @@ async function getDocument(tableName, stdId) {
   return new Promise((resolve, reject) => {
     if(Object.keys(documentList)) {
       resolve(documentList)
+    } else {
+      reject("No such document")
+    }
+  })
+}
+
+async function getRecord(tableId, docId) {
+  const snapshot = await db.collection(`main_collection/${tableId}/records`).doc(docId).get()
+  return new Promise((resolve, reject) => {
+    if(Object.keys(snapshot.data())) {
+      resolve(snapshot.data())
     } else {
       reject("No such document")
     }
@@ -73,21 +86,7 @@ async function deleteDocument(tableName, id) {
   await db.collection(`main_collection/${tableName}/records`).doc(id).delete()
 }
 
-async function getAdminTable(payload) {
-  const snapshot = await db.collection("table_collection")
-  .where('editor', '==', payload.username).get()
-  var tableList = []
-  snapshot.docs.forEach((doc) => {
-    tableList.push(doc.data())
-  })
-  return new Promise((resolve, reject) => {
-    if(Object.keys(tableList)) {
-      resolve(tableList)
-    } else {
-      reject("No such document")
-    }
-  })
-}
+
 
 async function getAdminDocument(tableName) {
   const snapshot = await db.collection(`main_collection/${tableName}/records`).get()
@@ -106,8 +105,26 @@ async function getAdminDocument(tableName) {
   })
 }
 
-async function updateAdminTable(tableName, updateInfo) {
-  await db.collection("table_collection").doc(tableName).set(updateInfo)
+async function getAdminTable(payload) {
+  const snapshot = await db.collection("table_collection")
+  .where('editor', '==', payload.username).get()
+  var tableList = []
+  snapshot.docs.forEach((doc) => {
+    const id = {id: doc.id}
+    const details = Object.assign(doc.data(), id)
+    tableList.push(details)
+  })
+  return new Promise((resolve, reject) => {
+    if(Object.keys(tableList)) {
+      resolve(tableList)
+    } else {
+      reject("No such document")
+    }
+  })
+}
+
+async function updateAdminTable(docId, updateInfo) {
+  await db.collection("table_collection").doc(docId).set(updateInfo)
 }
 
 async function deteleAdminTable(tableName) {
@@ -115,7 +132,7 @@ async function deteleAdminTable(tableName) {
 }
 
 async function addAdminTable(tableName, record) {
-  await db.collection(`table_collection`).doc(tableName).set(record)
+  await db.collection(`table_collection`).add(record)
 }
 
 
@@ -167,9 +184,9 @@ router.get("/admin/table", async (req, res) => {
 })
 
 router.post("/admin/update/:name", async (req, res) => {
-  const tableName = req.params.name
+  const docId = req.params.name
   const updateInfo = req.body.updated
-  updateAdminTable(tableName, updateInfo)
+  updateAdminTable(docId, updateInfo)
   .then(() => res.status(200).json({updated: "true"}))
   .catch((err) => res.status(403).json({msg: "This table doesn't exist"}))
 })
@@ -195,11 +212,22 @@ router.get("/admin/record/:name", async (req, res) => {
   return res.status(200).json(data)
 })
 
-//user
-router.get("/document/:id", async (req, res) => {
+router.post("/admin/update/record/:id", async (req, res) => {
   const tableName = req.params.id.split("-")[0]
+  const documentId = req.params.id.split("-")[1]
+  const updateInfo = req.body.updated
+  updateDocument(tableName, documentId, updateInfo)
+  .then(() => res.status(200).json({updated: "true"}))
+  .catch((err) => res.status(403).json({msg: "This document doesn't exist"}))
+})
+
+//user
+
+//get table's detail
+router.get("/document/:id", async (req, res) => {
+  const docId = req.params.id.split("-")[0]
   const stdId = req.params.id.split("-")[1]
-  const data = await getDocument(tableName, stdId)
+  const data = await getDocument(docId, stdId)
   return res.status(200).json(data)
 })
 
@@ -228,6 +256,14 @@ router.delete("/delete/:id", (req, res) => {
   .catch((err) => res.status(403).json({msg: "This document doesn't exist"}))
 })
 
+router.get("/document/record/:id", async (req, res) => {
+  const tableId = req.params.id.split("-")[0]
+  const documentId = req.params.id.split("-")[1]
+  const data = await getRecord(tableId, documentId)
+  return res.status(200).json(data)
+})
+
+//get list of table
 router.get("/table", async (req, res) => {
   if(req.query.uid){
     const uid = req.query.uid.replace(" ", "")

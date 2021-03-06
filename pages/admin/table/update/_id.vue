@@ -5,7 +5,6 @@
       <div class="my-2 grid md:grid-cols-5" v-for="(item, key, index) in columns" :key="index">
         <label class="md:col-start-1 md:col-span-2" for=key>{{item}} :</label>
         <input class="md:col-start-3 col-span-3 border-2 border-black p-1 xs:p-2" type="text" v-model="records[key]">
-        
       </div>
       <button class="bg-blue-400 p-1 hover:bg-gray-50" @click="update">確定</button>
       <button class="bg-red-400 p-1 hover:bg-gray-50" @click="cancel">取消</button>
@@ -14,28 +13,23 @@
 </template>
 
 <script>
-import { extractTable } from '../../../controller/extractTable'
+import { extractTable } from '../../../../controller/extractTable'
 export default {
     async asyncData({ params, store, $axios }) {
       const docId = params.id.split("-")[0]
+      const stdName = params.id.split("-")[2]
+      const stdId = params.id.split("-")[3]
       const tableInfo = store.getters["getTableInfo"]
-      const userInfo = store.getters["token/getUserInfo"]
       const extracted = extractTable(tableInfo, docId) 
       const records = await $axios.get(`/api/document/record/${params.id}`)
-      const nonedit = extracted[0].nonedit
-      let {[nonedit]:omit, ...columnsNames} = extracted[0].columnsNames
-      return {path: params.id, columns: columnsNames, userInfo: userInfo, records: records.data}
-    },
-    data() {
-      return {
-      }
+      return {path: params.id, columns: extracted[0].columnsNames, userInfo: {stdName, stdId}, records: records.data}
     },
     methods: {
       update() {
         this.records["stdId"] = this.userInfo.stdId
-        this.records["stdName"] = this.userInfo.username
+        this.records["stdName"] = this.userInfo.stdName
         const updated = {...this.records}
-        this.$axios.post(`/api/update/${this.path}`, {updated: updated})
+        this.$axios.post(`/api/admin/update/record/${this.path}`, {updated: updated})
         .then(() => {
           this.$router.go(-1)
           alert("Updated successfully")

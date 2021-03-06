@@ -6,11 +6,13 @@ const app = express()
 
 // Require API routes
 const auth = require('./routes/auth')
+const upload = require('./routes/drive')
 
 // Import API Routes
 app.use(cors())
 app.use(express.json());
 app.use(auth)
+app.use(upload)
 
 // Export express app
 module.exports = app

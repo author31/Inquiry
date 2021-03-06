@@ -4,7 +4,8 @@
       <h1 class="font-bold">新增資料</h1>
       <div class="my-2 grid md:grid-cols-5" v-for="(item, key, index) in columns" :key="index">
         <label class="md:col-start-1 md:col-span-2" for=key>{{item}}: </label>
-        <input class="md:col-start-3 col-span-3 border-2 border-black p-1 xs:p-2" type="text" v-model="records[key]">
+        <input class="md:col-start-3 col-span-3 border-2 border-black p-1 xs:p-2" type="text" v-model="records[key]" v-if="key != dlField">
+        <input class="md:col-start-3 col-span-3" type="file" accept="application/pdf" v-if="key == dlField" @change="onFileSelected">
       </div>
       <button class="bg-blue-400 p-1 hover:bg-gray-50" @click="save">確定</button>
       <button class="bg-red-400 p-1 hover:bg-gray-50" @click="cancel">取消</button>
@@ -21,15 +22,24 @@ export default {
       const tableInfo = store.getters["getTableInfo"]
       const userInfo = store.getters["token/getUserInfo"]
       const extracted = extractTable(tableInfo, tableName) 
-      return {name: params.name, columns: extracted[0].columnsNames, userInfo: userInfo, tableName: tableName}
+      const nonedit = extracted[0].nonedit
+      let {[nonedit]:omit, ...columnsNames} = extracted[0].columnsNames
+      return {name: params.name, columns: columnsNames, userInfo: userInfo, tableName: tableName, dlField: extracted[0].downloadField}
     },
     data() {
       return {
-        records: []
+        records: [],
+        file: ''
       }
     },
     methods: {
-      save() {
+      async save() {
+        if(this.dlField != ""){
+          const fd = new FormData()
+          fd.append(`${this.file.name}-${this.userInfo.stdId}-${this.userInfo.username0}`, this.file, this.file.name)
+          const flink = await this.$axios.post(`/api/upload`, fd)
+          this.records[this.dlField] = flink.data
+        }
         this.records["stdId"] = this.userInfo.stdId
         this.records["stdName"] = this.userInfo.username
         const newRecord = {...this.records}
@@ -45,6 +55,9 @@ export default {
       },
       cancel() {
         this.$router.go(-1)
+      },
+      onFileSelected(event) {
+        this.file = event.target.files[0]
       }
     }
 }
