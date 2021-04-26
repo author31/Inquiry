@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center">
-    <div class="bg-gray-200 shadow-md h-64 mt-32 lg:w-3/12">
+    <div class="bg-gray-300 shadow-lg h-64 mt-32 lg:w-3/12">
       <div class="flex justify-center">
         <h1 class="w-48 text-center font-bold pt-8"> 登入 </h1>
       </div>

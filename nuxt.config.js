@@ -16,7 +16,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/zhenli.ico' }
     ]
   },
 
@@ -31,7 +31,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    { src: '~/plugins/persistedState.js'}
+    { src: '~/plugins/persistedState.js'},
   ],
 
   /*

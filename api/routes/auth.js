@@ -129,6 +129,7 @@ async function updateAdminTable(docId, updateInfo) {
 
 async function deteleAdminTable(tableName) {
   await db.collection(`table_collection`).doc(tableName).delete()
+  await db.collection(`main_collection`).doc(tableName).delete()
 }
 
 async function addAdminTable(tableName, record) {
@@ -152,10 +153,13 @@ router.post('/login', (req, res, next) => {
       grade: result.data().grade,
       authenticated: true,
     }))
-    .catch((err) => res.json({
-      uid: claims.uid,
-      username: '',
-    }))
+    .catch((err) => {
+      console.log(err)
+      res.json({
+        uid: claims.uid,
+        username: '',
+      })
+    })
   })
   .catch((error) => {
     console.log(error)

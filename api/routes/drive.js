@@ -3,6 +3,7 @@ const { Router } = require('express')
 const formidable = require('formidable');
 const fs = require("fs");
 const { resolve } = require('path');
+const { userInfo } = require('os');
 const router = Router()
 
 // Obtain user credentials to use for the request
@@ -13,11 +14,20 @@ const auth = new google.auth.GoogleAuth({
 google.options({auth});
 const drive = google.drive('v3');
 
+const requireStudentID = () => {
+    return(req, res, next) => {
+        if(req.headers.uid == "") {
+            res.status(401).json("Invalid Authentication")
+        } else {
+            next()
+        }
+    }
+}
 
-async function upload(fname, files) {
+async function upload(fname, files, folderId) {
     var fileMetadata = {
         'name': fname,
-        parents: ["18a2QJlHc9fEbMJQIqJb-CB4l0XxoQctz"]
+        parents: [folderId]
       };
     var media = {
         body: fs.createReadStream(files)
@@ -37,14 +47,45 @@ async function upload(fname, files) {
     })
 }
 
+async function newFolder(folderName) {
+    var fileMetadata = {
+        'name': folderName,
+        'mimeType': 'application/vnd.google-apps.folder',
+        'parents': [folderId]
+    }
+    const folderId = await drive.files.create({
+        resource: fileMetadata,
+        fields: 'id'
+    })
+    return new Promise((resolve, reject) => {
+        if(folderId.data){
+            resolve(folderId.data)
+        } else {
+            reject("Created failed")
+        }
+    })
+}
 
 router.post("/upload", async(req, res) => {
+    var folderId = ""
     new formidable.IncomingForm().parse(req)
+    .on('field', (fieldName, fieldValue) => {
+        folderId = fieldValue
+    })
     .on("file", (name, file) => {
-        upload(name, file.path)
+        upload(name, file.path, folderId)
         .then((flink) => res.status(200).json(flink))
         .catch((err) => res.status(500).json(err))
     })
+    
+    
 })
+
+router.get("/folderCreate/:fname", requireStudentID() ,async (req, res) => {
+    newFolder(req.params.fname)
+    .then((fID) => res.status(200).json(fID))
+    .catch((err) => res.status(500).json(err))
+})
+
 
 module.exports = router

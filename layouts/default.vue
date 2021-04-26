@@ -74,17 +74,22 @@ table {
 }
 /* Zebra striping */
 tr:nth-of-type(odd) { 
-  background: rgba(35, 221, 181, 0.815)
+  background: rgba(98, 248, 216, 0.815)
 }
+
+
 th { 
-  background: #333; 
+  background: rgb(68, 67, 67); 
   color: white; 
   font-weight: bold; 
 }
 td, th { 
   padding: 6px; 
-  border: 1px solid #ccc; 
   text-align: left; 
+}
+
+td {
+  line-height: 2rem;
 }
 
 @media only screen and (max-width: 760px),

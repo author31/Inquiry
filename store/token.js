@@ -51,12 +51,13 @@ export const mutations = {
 export const actions = {
     async login({commit}) {
         const provider = new this.$fireModule.auth.GoogleAuthProvider()
+        provider.setCustomParameters({hd: "au.edu.tw"})
         this.$fireModule.auth().signInWithPopup(provider)
         .then((res) => {
             return res.user.getIdToken()
         })
         .then((idToken) => {
-            this.$axios.post('/api/login', {idToken: idToken})
+            this.$axios.post('/api/login',  {idToken: idToken})
             .then((res) => {
                 if(res.data.username === "") {
                     commit('setUid', res.data.uid)
@@ -72,7 +73,7 @@ export const actions = {
                 }
                 
             })
-            .catch((err) => console.log(err))
+            .catch((err) => console.log(err.response.data))
         })
     },
     logout({commit}) {
