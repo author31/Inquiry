@@ -91,3 +91,5 @@ sw.*
 *.swp
 # XDN generated build directory
 .xdn
+.private
+.api/tok.json

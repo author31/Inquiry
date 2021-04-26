@@ -15,7 +15,10 @@
               <nuxt-link :to="`/documents/delete/${name}-${rec.id}`"><i class="fas fa-times text-red-800"></i></nuxt-link>
             </td>
             <td data-label="學號" class="border-2 border-black">{{rec.stdId}}</td>
-            <td :data-label=item[1] class="border-2 border-black" v-for="(item, key, index) in filter(rec)" :key="index">{{ rec[key+1] }}</td>
+            <td :data-label=item[1] class="border-2 border-black" v-for="(item, key, index) in filter(rec)" :key="index">
+              <p v-if="features[key+1] != 'file'">{{ rec[key+1] }}</p>
+              <a v-if="features[key+1] == 'file'" :href="rec[key+1]" target="_blank" rel="noopener noreferrer">{{ rec[key+1] }}</a>
+            </td>
             <td class="w-10" data-label="修改"><nuxt-link class="flex md:justify-center" :to="`/admin/table/update/${name}-${rec.id}`"><i class="far fa-edit text-blue-800"></i></nuxt-link></td>
         </tr>
       </table>
@@ -31,8 +34,8 @@ export default {
         const tableInfo = store.getters["getTableInfo"]
         const userInfo = store.getters["token/getUserInfo"]
         const extracted = extractTable(tableInfo, docId) 
-        const records = await $axios.get(`/api/admin/record/${params.name}`) 
-        return {name: params.name, tableInfo: extracted[0], userInfo: userInfo, records: records.data}
+        const records = await $axios.get(`/api/admin/record/${params.name}`)
+        return {name: params.name, tableInfo: extracted[0], userInfo: userInfo, records: records.data, features: extracted[0].features}
     },
     methods: {
         filter() {

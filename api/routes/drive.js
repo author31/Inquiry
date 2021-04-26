@@ -51,7 +51,7 @@ async function newFolder(folderName) {
     var fileMetadata = {
         'name': folderName,
         'mimeType': 'application/vnd.google-apps.folder',
-        'parents': [folderId]
+        'parents': ["1u1gbK8NJA5wPbNUfhcSt7HJe-pQ3sS0F"]
     }
     const folderId = await drive.files.create({
         resource: fileMetadata,
@@ -85,6 +85,13 @@ router.get("/folderCreate/:fname", requireStudentID() ,async (req, res) => {
     newFolder(req.params.fname)
     .then((fID) => res.status(200).json(fID))
     .catch((err) => res.status(500).json(err))
+})
+
+router.get("/demo/:fname", requireStudentID() ,async (req, res) => {
+    const folderId = await drive.files.create({
+        resource: fileMetadata,
+        fields: 'id'
+    })
 })
 
 
