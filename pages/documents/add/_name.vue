@@ -47,11 +47,11 @@ export default {
         const newRecord = {...this.records}
         this.$axios.post(`/api/add/${this.tableName}`, {newRecord: newRecord})
         .then((res) => {
-          alert("Created successfully")
+          alert("建立成功")
           this.$router.go(-1)
         })
         .catch((err) => {
-          alert("Something went wrong, try again")
+          alert("發生錯誤，請稍後重試")
           this.$router.go(-1)
         })
       },

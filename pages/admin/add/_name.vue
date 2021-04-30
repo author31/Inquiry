@@ -53,11 +53,11 @@ export default {
             }
             this.$axios.post(`api/admin/add`, {newRecord: newRecord})
             .then((res) => {
-                alert("Created successfully")
+                alert("建立成功")
                 this.$router.go(-1)
             })
             .catch((err) => {
-                alert("Failed, try again")
+                alert("發生錯誤，請稍後重試")
                 this.$router.go(-1)
             })
         },

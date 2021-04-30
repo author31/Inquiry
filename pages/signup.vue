@@ -16,11 +16,15 @@
                 </select>
 
                 <label class="col-start-1 col-span-2" for="gender">性別: </label>
-                <select class="col-start-3 col-end-12 border-2 ml-4" v-model="userInfo.gender">
+                <select class="col-start-3 col-end-12 border-2 mb-2 ml-4" v-model="userInfo.gender">
                     <option disabled value="">請選擇</option>
                     <option value="male">男</option>
                     <option value="female">女</option>
                 </select>
+
+                <label class="col-start-1 col-span-2" for="deparment">卡號: </label>
+                <input class="col-start-3 col-end-12 border-2 border-black mb-2 ml-4" type="text" name="deparment" v-model="userInfo.cardid"><br/>
+
                 
             </div>
             <button class="bg-red-400 px-2 mt-2" @click="signUp"> 註冊 </button> 
@@ -37,6 +41,7 @@ export default {
                 department: "",
                 grade: "",
                 gener: "",
+                cardid: "",
             }
         }
     },

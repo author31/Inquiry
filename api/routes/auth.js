@@ -169,9 +169,11 @@ router.post('/login', (req, res, next) => {
 router.post("/signup", (req, res) => {
   const userInfo = req.body.userInfo
   addUser(userInfo)
-  .then((result) => res.sendStatus(200))
+  .then(() => {
+    return res.status(200).json(table);
+  })
   .catch((err) => {
-    throw new Error(err)
+    return res.status(400).json("Request failed")
   })
 })
 

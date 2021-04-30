@@ -94,8 +94,12 @@ export const actions = {
         this.$axios.post('/api/signup', {userInfo: userInfo})
         .then((res) => {
             commit('setUserInfo', res.data)
+            alert("建立成功")
             this.$router.push("/login")
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+            alert("發生錯誤，請稍後重試")
+            this.$router.push("/signup")
+        })
     },
 }
